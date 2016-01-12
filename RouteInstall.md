@@ -222,13 +222,9 @@ While we're at it, we might as well put the Bootstrap container in place. Replac
 
 with this line:
 
-```html
-<div class="container">
-```
 ```ruby
+<div class="container">
   <%= yield %>
-```
-```html
 </div>
 ```
 
