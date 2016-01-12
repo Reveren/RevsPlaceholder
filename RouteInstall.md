@@ -216,13 +216,13 @@ Put the notices in the tempalte in `app/views/layouts/application.html.erb` just
 
 While we're at it, we might as well put the Bootstrap container in place. Replace this line:
 
-```ruby
+```
 <%= yield %>
 ```
 
 with this line:
 
-```ruby
+```
 <div class="container">
   <%= yield %>
 </div>
