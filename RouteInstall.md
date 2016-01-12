@@ -113,12 +113,6 @@ The generator will install an initializer which describes ALL of Devise's config
 rails generate devise User
 ```
 
-Next, you need to set up the default URL options for the Devise mailer in each environment. Here is a possible configuration for `config/environments/development.rb`:
-
-```ruby
-config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-```
-
 Build the views so you can customize the templates later.
 
 ```console
@@ -255,6 +249,15 @@ Adjust your `routes.rb` file to make a landing page. Also remove the notes in th
 ```ruby
 root to: "companies#index"
 ```
+
+## Config
+
+You need to set up the default URL options for the Devise mailer in each environment. Here is a possible configuration for `config/environments/development.rb`:
+
+```ruby
+config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+```
+
 ## Models
 
 Now let's adjust our models to compensate for our foreign keys. 
