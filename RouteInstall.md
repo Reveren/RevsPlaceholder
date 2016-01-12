@@ -5,7 +5,7 @@ Route your day
 
 First we'll create a new project
 
-```ruby
+```console
 rails new route
 ```
 
@@ -63,159 +63,39 @@ gem 'devise'
 
 Now run bundle install.
 
-```ruby
+```console
 bundle install
 ```
 
-Create the database by running migrate.
+During this setup, I'm only going to run `rake db-migrate` only once at the end. This will save some time, but will make error debugging a little bit more difficult further down the road if you missed something. 
 
-```ruby
-rake db:migrate
+## Days
+
+Create the model for the days. 
+
+```console
+rails g model Day name:string abbrev:string
 ```
 
-Let's create the models for the days and the states. 
+## States
 
-```ruby
-rails g model Day name:string abbrev:string
+Create the model for the days. 
+
+```console
 rails g model State name:string abbrev:string
 ```
 
-Before we run migrate, let's add some limits to the migration. You will need to open and modify both migrations that we just created. They can be found in:
-`db / migrate / XXXXX_create_days.rb` 
-`db / migrate / XXXXX_create_states.rb` 
+## Icons
 
-We will add a limit of 25 to the names and 2 or 3 to the abbreviations like so:
+Create the model for the icons. 
 
-**Days:**
-
-```ruby
-class CreateDays < ActiveRecord::Migration
-  def change
-    create_table :days do |t|
-      t.string :name, :limit => 25
-      t.string :abbrev, :limit => 3
-
-      t.timestamps null: false
-    end
-  end
-end
-```
-
-**States:**
-
-```ruby
-class CreateStates < ActiveRecord::Migration
-  def change
-    create_table :states do |t|
-      t.string :name, :limit => 25
-      t.string :abbrev, :limit => 2
-
-      t.timestamps null: false
-    end
-  end
-end
-```
-
-Now we can run the migrate.
-
-```ruby
-rake db:migrate
-```
-
-## Company
-
-Let's use a scaffold to save some time. We will build the Company controller first. 
-
-```ruby
-rails g scaffold Company name address city state_id:integer zip:integer notes:text active:boolean
-```
-
-```ruby
-rake db:migrate
-```
-
-Adjust your `routes.rb` file to make a landing page. Also remove the notes in there. 
-
-```ruby
-root to: "companies#index"
-```
-
-## Contacts
-
-Now let's build the Contacts
-
-```ruby
-rails g scaffold Contact first_name last_name title phone alt_phone email active:boolean
-```
-
-Add the migration to attach the contacts to the Companies
-
-```ruby
-rails g migration AddCompanyIdToContacts company_id:integer
-```
-
-Now let's edit the migration file to add our foreign key
-
-```ruby
-class AddCompanyIdToContacts < ActiveRecord::Migration
-  def up
-    add_column :contacts, :company_id, :integer
-    add_foreign_key :contacts, :companies, column: :company_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-  end
-
-  def down
-    remove_foreign_key :contacts, column: :company_id
-    remove_column :contacts, :company_id
-  end
-end
-```
-
-## Boostrap
-
-Let's add Bootstrap and Font Awesome to our Gemfile.
-
-```ruby
-gem 'bootstrap-sass'
-gem 'font-awesome-rails'
-```
-
-Remove the scaffold.css from your css in `app/assets/stylesheets/scaffold.css`.
-
-In the same folder, change the rename `application.css` to `application.css.scss` by adding `scss` to the end of it.
-
-Import Bootstrap styles in `app/assets/stylesheets/application.css.scss`.
-
-```scss
-@import "bootstrap-sprockets";
-@import "bootstrap";
-@import "font-awesome";
-```
-
-`bootstrap-sprockets` must be imported before `bootstrap` for the icon fonts to work.
-
-Also, again make sure the file has `.scss` extension. If you have just generated a new Rails app, it may come with a `.css` file instead. If this file exists, it will be served instead of Sass.
-
-Then, remove all the `*= require_self` and `*= require_tree .` statements from the sass file. Instead, we use `@import` to import Sass files.
-
-**Do not use** `*= require` **in Sass or your other stylesheets will not be able to access the Bootstrap mixins or variables.**
-
-Require Bootstrap Javascripts in `app/assets/javascripts/application.js`. Make sure it goes ***after*** `//= require jquery`. Usually it goes after `//= require turbolinks`.
-
-```js
-//= require bootstrap
+```console
+rails g model Icon description:string fontawesome:string bootstrap:string example:attachment
 ```
 
 ## Devise
 
-Devise 4.0 works with Rails 4.2 onwards. You can add it to your Gemfile with:
-
-```ruby
-gem 'devise'
-```
-
-Run the bundle command to install it.
-
-After you install Devise and add it to your Gemfile, you need to run the generator:
+If Devise was already added to your Gemfile from the first step above, you need to start by running the generator:
 
 ```console
 rails generate devise:install
@@ -227,108 +107,220 @@ The generator will install an initializer which describes ALL of Devise's config
 rails generate devise User
 ```
 
-Next, check the User MODEL for any additional configuration options you might want to add, such as confirmable or lockable. For example, if you add the confirmable option in the model, you'll need to uncomment the Confirmable section in the migration. Then run `rake db:migrate`
-
 Next, you need to set up the default URL options for the Devise mailer in each environment. Here is a possible configuration for `config/environments/development.rb`:
 
 ```ruby
 config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 ```
 
-You should restart your application (`ctrl-c` and then `rails s`) after changing Devise's configuration options. Otherwise, you will run into strange errors, for example, users being unable to login and route helpers being undefined.
+Build the views so you can customize the templates later.
 
-Put the notices in the tempalte in `app/views/layouts/application.html.erb` just above the `<%= yield %>`.
-
-```html
-<% if notice %><div class="alert alert-info"><%= notice %></div><% end %>
-<% if alert %><div class="alert alert-warning"><%= alert %></div><% end %>
-```
-
-While we're at it, we might as well put the Bootstrap container in place. Replace this line:
-
-```html
-<%= yield %>
-```
-
-with this line:
-
-```html
-<div class="container">
-  <%= yield %>
-</div>
-```
-
-Build the views so you can customize the templates.
-
-```ruby
+```console
 rails g devise:views
 ```
 
-Now let's add the user_id to companies. 
+## Company
 
-```ruby
-rails g migration AddUserIdToCompanies user_id:integer
+Let's use a scaffold to save some time. We will build the Company controller first. 
+
+```console
+rails g scaffold Company name address city state_id:integer zip:integer notes:text active:boolean
 ```
 
-Before we run migrate, we need to adjsut the migration to add the foreign keys. We will use the old up and down format. Your new migration should look like this. 
+Add foreign keys to migration.
 
 ```ruby
-class AddUserIdToCompanies < ActiveRecord::Migration
-  def up
-    add_column :companies, :user_id, :integer
+class CreateCompanies < ActiveRecord::Migration
+  def change
+    create_table :companies do |t|
+      t.integer :user_id
+      t.string :name
+      t.string :address
+      t.string :city
+      t.integer :state_id
+      t.integer :zip
+      t.text :notes
+      t.boolean :active
+
+      t.timestamps null: false
+    end
     add_foreign_key :companies, :users, column: :user_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
   end
-  
-  def down
-    remove_foreign_key :companies, column: :user_id
-    remove_column :companies, :user_id
-  end
-end
-```
-Do the same for Contacts
-
-```ruby
-rails g migration AddUserIdToContacts user_id:integer
-```
-
-And add it's foreign keys to its migration:
-
-```ruby
-class AddUserIdToContacts < ActiveRecord::Migration
-  def up
-    add_column :contacts, :user_id, :integer
-    add_foreign_key :contacts, :users, column: :user_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-  end
-
-  def down
-    remove_foreign_key :contacts, column: :user_id
-    remove_column :contacts, :user_id
-  end
 end
 ```
 
-Now we canrun migrate.
+## Contacts
 
-```ruby
-rake db:migrate
+Now let's build the Contacts.
+
+```console
+rails g scaffold Contact first_name last_name title phone alt_phone email notes:text active:boolean
 ```
 
-Now let's adjust our models. 
-
-**User Model**
+Add foreign keys to migration.
 
 ```ruby
-has_many :companies
+class CreateContacts < ActiveRecord::Migration
+  def change
+    create_table :contacts do |t|
+      t.integer :user_id
+      t.integer :company_id
+      t.string :first_name
+      t.string :last_name
+      t.string :title
+      t.string :phone
+      t.string :alt_phone
+      t.string :email
+      t.boolean :active
+
+      t.timestamps null: false
+    end
+    add_foreign_key :contacts, :users,     column: :user_id,    primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :contacts, :companies, column: :company_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+  end
+end
 ```
 
-**Company Model**
+
+## Stops
+
+Now let's build the Stops.
+
+```console
+rails g scaffold Stop user_id:integer company_id:integer contact_id:integer day_id:integer active:boolean week notes:text
+```
+
+Add foreign keys to migration.
 
 ```ruby
-belongs_to :user
+class CreateStops < ActiveRecord::Migration
+  def change
+    create_table :stops do |t|
+      t.integer :user_id
+      t.integer :company_id
+      t.integer :contact_id
+      t.integer :day_id
+      t.boolean :active
+      t.string :week
+      t.text :notes
+
+      t.timestamps null: false
+    end
+    add_foreign_key :stops, :users,     column: :user_id,    primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :stops, :companies, column: :company_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :stops, :contacts,  column: :contact_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :stops, :days,      column: :day_id,     primary_key: :id, on_update: :cascade, on_delete: :cascade
+  end
+end
 ```
 
-### Change the Controller
-We can now add the logged in user to company creation by changing this line:
+## Timeline Updates
+
+Now let's build the Timeline Updates.
+
+```console
+rails g scaffold Update user_id:integer stop_id:integer icon_id:integer notes:text
+```
+
+Add foreign keys to migration.
+
+```ruby
+class CreateUpdates < ActiveRecord::Migration
+  def change
+    create_table :updates do |t|
+      t.integer :user_id
+      t.integer :stop_id
+      t.integer :icon_id
+      t.text :notes
+
+      t.timestamps null: false
+    end
+    add_foreign_key :updates, :users, column: :user_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :updates, :stops, column: :stop_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :updates, :icons, column: :icon_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+  end
+end
+```
+
+## Routes
+
+Adjust your `routes.rb` file to make a landing page. Also remove the notes in there. 
+
+```ruby
+root to: "companies#index"
+```
+## Models
+
+Now let's adjust our models to compensate for our foreign keys. 
+
+**State**
+
+```ruby
+  has_one :company
+```
+
+**Day**
+
+```ruby
+  has_many :stops
+```
+
+**Icon**
+
+```ruby
+  has_many :updates
+```
+
+**User**
+
+```ruby
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable 
+  has_many :companies
+```
+
+**Company**
+
+```ruby
+  belongs_to :user
+  belongs_to :state
+```
+
+**Contact**
+
+```ruby
+  has_many :stops, dependent: :destroy
+  belongs_to :company
+```
+
+**Stop**
+
+```ruby
+  belongs_to :user
+  belongs_to :contact
+  belongs_to :day
+  belongs_to :company
+```
+
+**Update**
+
+```ruby
+  belongs_to :company
+  belongs_to :icon
+```
+
+## Controllers
+
+**`companies_controller.rb`**
+
+Make sure only logged-in users can see the content.
+
+```ruby
+before_action :authenticate_user!
+```
+
+Make sure all content that is created is attributed to the person who created it by adding `current_user`:
+
+Change this line: 
 
 ```ruby
 def create
@@ -342,14 +334,9 @@ def create
   @company = current_user.companies.new(company_params)
 ```
 
-At this point the server should start and you hsould be able to see the basic framework, but we need to make sure those who are logged in only see what they created. The change is similar to the one above, but it will break the site until the first user is created. We will add the user to the db:seed file and then run it. 
+We also need to make sure the logged-in user can only see what they created.
 
-First, we'll finish up with the controller. Add this to the top just under the first `before_action`:
-```ruby
-before_action :authenticate_user!
-```
-
-Now change the index definition from this:
+Change the index definition from this:
 
 ```ruby
 def index
@@ -364,6 +351,76 @@ def index
   @companies = current_user.companies.all
 end
 ```
+
+
+## Boostrap
+
+### CSS 
+
+Make sure Bootstrap and Font Awesome were added and uncommented in our Gemfile. If not, do that and run `bundle install`.
+
+```ruby
+gem 'bootstrap-sass'
+gem 'font-awesome-rails'
+```
+
+Remove the scaffold.css from your css in `app/assets/stylesheets/scaffold.css`.
+
+In the same folder, change the rename `application.css` to `application.css.scss` by adding `scss` to the end of it.
+
+Open `app/assets/stylesheets/application.css.scss` and import Bootstrap styles.
+
+```scss
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "font-awesome";
+```
+
+`bootstrap-sprockets` must be imported before `bootstrap` for the icon fonts to work.
+
+Remove all the `*= require_self` and `*= require_tree .` statements from the file. (We use `@import` to import Sass files instead)
+
+**Remember, do not use** `*= require` **in Sass or your other stylesheets will not be able to access the Bootstrap mixins or variables.**
+
+### JS
+
+Require Bootstrap Javascripts in `app/assets/javascripts/application.js`. Make sure it goes ***after*** `//= require jquery`. Usually it goes after `//= require turbolinks`. The last five lines should look like this:
+
+```js
+//= require jquery
+//= require jquery_ujs
+//= require turbolinks
+//= require bootstrap
+//= require_tree .
+```
+
+### Template
+
+Put the notices in the template in `app/views/layouts/application.html.erb` just above the `<%= yield %>`.
+
+```html
+<% if notice %><div class="alert alert-info"><%= notice %></div><% end %>
+<% if alert %><div class="alert alert-warning"><%= alert %></div><% end %>
+```
+
+While we're at it, put the Bootstrap container in place to keep content from hugging edge. Replace this line:
+
+```html
+<%= yield %>
+```
+
+with this line:
+
+```html
+<div class="container">
+  <%= yield %>
+</div>
+```
+
+
+
+
+
 
 ## Seeds.rb
 
