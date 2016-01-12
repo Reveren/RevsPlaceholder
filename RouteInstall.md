@@ -670,8 +670,8 @@ company_list = [
   ['LinkedIn', '2029 Stierlin Ct', 'Mountain View', '4', '94043', '', '0', '1']
 ]
 
-company_list.each do |name, address, city, state_id, zip, notes, active, current_user|
-  Company.create( name: name, address: address,  city: city, state_id: state_id, zip: zip, notes: notes, active: active, current_user: current_user)
+company_list.each do |name, address, city, state_id, zip, notes, active, user_id|
+  Company.create( name: name, address: address,  city: city, state_id: state_id, zip: zip, notes: notes, active: active, user_id: user_id)
 end
 ```
 
