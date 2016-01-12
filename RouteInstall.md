@@ -310,7 +310,7 @@ Now let's adjust our models to compensate for our foreign keys.
 
 ## Controllers
 
-**companies_controller.rb**
+### companies_controller.rb
 
 Make sure only logged-in users can see the content.
 
@@ -352,7 +352,7 @@ def index
 end
 ```
 
-**contacts_controller.rb**
+### contacts_controller.rb
 
 Make sure only logged-in users can see the content.
 
@@ -394,7 +394,7 @@ def index
 end
 ```
 
-**stops_controller.rb**
+### stops_controller.rb
 
 Make sure only logged-in users can see the content.
 
@@ -436,7 +436,7 @@ def index
 end
 ```
 
-**updates_controller.rb**
+### updates_controller.rb
 
 Make sure only logged-in users can see the content.
 
@@ -477,7 +477,6 @@ def index
   @updates = current_user.updates.all
 end
 ```
-
 
 ## Boostrap
 
@@ -544,7 +543,7 @@ with this line:
 ```
 
 
-
+We're almost ready to migrate, but first you need to fill in your seed file with some data so we can run db:seed right after we run db:migrate.
 
 
 
@@ -641,7 +640,7 @@ end
 # #########################################
 
 user_list = [
-  ['user@example.com', 'password', 'password']
+  ['user@example.com', 'admin', 'admin']
 ]
 
 user_list.each do |email, password, password_confirmation|
@@ -667,10 +666,21 @@ company_list.each do |name, address, city, state_id, zip, notes, active, current
 end
 ```
 
+## Migrate
+
+We're finally ready to create the database and migrate it to see if we have any errors. 
+
+```console
+rake db:migrate
+```
+
 Now run the seed file:
 
-```ruby
+```console
 rake db:seed
 ```
 
 You should now have a login to use to log into the site with. 
+
+Username: `user@example.com`
+Password: `admin`
