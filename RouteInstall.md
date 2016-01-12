@@ -214,6 +214,20 @@ Put the notices in the tempalte in `app/views/layouts/application.html.erb` just
 <% if alert %><div class="alert alert-warning"><%= alert %></div><% end %>
 ```
 
+While we're at it, we might as well put the Bootstrap container in place. Replace this line:
+
+```ruby
+<%= yield %>
+```
+
+with this line:
+
+```ruby
+<div class="container">
+  <%= yield %>
+</div>
+```
+
 Build the views so you can customize the templates.
 
 ```ruby
