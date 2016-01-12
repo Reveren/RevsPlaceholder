@@ -140,7 +140,7 @@ Adjust your `routes.rb` file to make a landing page. Also remove the notes in th
 root to: "companies#index"
 ```
 
-## Company
+## Contacts
 
 Now let's build the Contacts
 
