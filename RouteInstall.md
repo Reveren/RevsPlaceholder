@@ -171,6 +171,7 @@ class CreateContacts < ActiveRecord::Migration
       t.string :phone
       t.string :alt_phone
       t.string :email
+      t.text :notes
       t.boolean :active
 
       t.timestamps null: false
