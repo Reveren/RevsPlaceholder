@@ -663,11 +663,11 @@ end
 # #########################################
 
 company_list = [
-  ['Twitter', '1355 Market Street', 'San Francisco', '4', '94103', '', '1', '1'],
-  ['Apple', '1 Infinite Loop', 'Cupertino', '4', '95014', '', '1', '1'],
-  ['Facebook', '1 Hacker Way', 'Menlo Park', '4', '94025', '', '1', '1'],
-  ['Google', '1600 Amphitheatre Parkway', 'Mountain View', '4', '94043', '', '1', '1'],
-  ['LinkedIn', '2029 Stierlin Ct', 'Mountain View', '4', '94043', '', '0', '1']
+  ['Twitter', '1355 Market Street', 'San Francisco', '5', '94103', '', '1', '1'],
+  ['Apple', '1 Infinite Loop', 'Cupertino', '5', '95014', '', '1', '1'],
+  ['Facebook', '1 Hacker Way', 'Menlo Park', '5', '94025', '', '1', '1'],
+  ['Google', '1600 Amphitheatre Parkway', 'Mountain View', '5', '94043', '', '1', '1'],
+  ['LinkedIn', '2029 Stierlin Ct', 'Mountain View', '5', '94043', '', '0', '1']
 ]
 
 company_list.each do |name, address, city, state_id, zip, notes, active, user_id|
