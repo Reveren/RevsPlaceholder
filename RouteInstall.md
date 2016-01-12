@@ -683,4 +683,5 @@ rake db:seed
 You should now have a login to use to log into the site with. 
 
 Username: `user@example.com`
+
 Password: `admin`
