@@ -209,7 +209,7 @@ You should restart your application (`ctrl-c` and then `rails s`) after changing
 
 Put the notices in the tempalte in `app/views/layouts/application.html.erb` just above the `<%= yield %>`.
 
-```ruby
+```
 <% if notice %><div class="alert alert-info"><%= notice %></div><% end %>
 <% if alert %><div class="alert alert-warning"><%= alert %></div><% end %>
 ```
