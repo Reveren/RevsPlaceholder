@@ -9,6 +9,12 @@ First we'll create a new project
 rails new route
 ```
 
+cd into directory
+
+```console
+cd route
+```
+
 Now we need to change the Gemfile a little to load some of our first add-ons. These are a collection of some of my most used and future to be used addons. Note that the versions might change from the original Gemfile and the pasted text below. (more specifically, take note of rails version)
 
 ```ruby
