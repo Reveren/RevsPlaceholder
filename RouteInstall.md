@@ -671,7 +671,7 @@ company_list = [
 ]
 
 company_list.each do |name, address, city, state_id, zip, notes, active, current_user|
-  User.create( name: name, address: address,  city: city, state_id: state_id, zip: zip, notes: notes, active: active, current_user: current_user)
+  Company.create( name: name, address: address,  city: city, state_id: state_id, zip: zip, notes: notes, active: active, current_user: current_user)
 end
 ```
 
