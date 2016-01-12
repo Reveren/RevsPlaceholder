@@ -382,7 +382,7 @@ to this:
 
 ```ruby
 def create
-  @contact = current_user.contacts.new(company_params)
+  @contact = current_user.contacts.new(contact_params)
 ```
 
 We also need to make sure the logged-in user can only see what they created.
@@ -417,14 +417,14 @@ Change this line:
 
 ```ruby
 def create
-  @stop = Stop.new(contact_params)
+  @stop = Stop.new(stop_params)
 ```
 
 to this:
 
 ```ruby
 def create
-  @stop = current_user.stops.new(company_params)
+  @stop = current_user.stops.new(stop_params)
 ```
 
 We also need to make sure the logged-in user can only see what they created.
@@ -459,14 +459,14 @@ Change this line:
 
 ```ruby
 def create
-  @update = Update.new(contact_params)
+  @update = Update.new(update_params)
 ```
 
 to this:
 
 ```ruby
 def create
-  @update = current_user.updates.new(company_params)
+  @update = current_user.updates.new(update_params)
 ```
 
 We also need to make sure the logged-in user can only see what they created.
