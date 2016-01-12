@@ -310,7 +310,7 @@ Now let's adjust our models to compensate for our foreign keys.
 
 ## Controllers
 
-**`companies_controller.rb`**
+**companies_controller.rb**
 
 Make sure only logged-in users can see the content.
 
@@ -349,6 +349,132 @@ to this:
 ```ruby
 def index
   @companies = current_user.companies.all
+end
+```
+
+**contacts_controller.rb**
+
+Make sure only logged-in users can see the content.
+
+```ruby
+before_action :authenticate_user!
+```
+
+Make sure all content that is created is attributed to the person who created it by adding `current_user`:
+
+Change this line: 
+
+```ruby
+def create
+  @contact = Contact.new(contact_params)
+```
+
+to this:
+
+```ruby
+def create
+  @contact = current_user.contacts.new(company_params)
+```
+
+We also need to make sure the logged-in user can only see what they created.
+
+Change the index definition from this:
+
+```ruby
+def index
+  @contacts = Contact.all
+end
+```
+
+to this:
+
+```ruby
+def index
+  @contacts = current_user.contacts.all
+end
+```
+
+**stops_controller.rb**
+
+Make sure only logged-in users can see the content.
+
+```ruby
+before_action :authenticate_user!
+```
+
+Make sure all content that is created is attributed to the person who created it by adding `current_user`:
+
+Change this line: 
+
+```ruby
+def create
+  @stop = Stop.new(contact_params)
+```
+
+to this:
+
+```ruby
+def create
+  @stop = current_user.stops.new(company_params)
+```
+
+We also need to make sure the logged-in user can only see what they created.
+
+Change the index definition from this:
+
+```ruby
+def index
+  @stops = Stop.all
+end
+```
+
+to this:
+
+```ruby
+def index
+  @stops = current_user.stops.all
+end
+```
+
+**updates_controller.rb**
+
+Make sure only logged-in users can see the content.
+
+```ruby
+before_action :authenticate_user!
+```
+
+Make sure all content that is created is attributed to the person who created it by adding `current_user`:
+
+Change this line: 
+
+```ruby
+def create
+  @update = Update.new(contact_params)
+```
+
+to this:
+
+```ruby
+def create
+  @update = current_user.updates.new(company_params)
+```
+
+We also need to make sure the logged-in user can only see what they created.
+
+Change the index definition from this:
+
+```ruby
+def index
+  @updates = Update.all
+end
+```
+
+to this:
+
+```ruby
+def index
+  @updates = current_user.updates.all
 end
 ```
 
