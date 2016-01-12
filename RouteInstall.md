@@ -140,6 +140,36 @@ Adjust your `routes.rb` file to make a landing page. Also remove the notes in th
 root to: "companies#index"
 ```
 
+## Company
+
+Now let's build the Contacts
+
+```ruby
+rails g scaffold Contact first_name last_name title phone alt_phone email active:boolean
+```
+
+Add the migration to attach the contacts to the Companies
+
+```ruby
+rails g migration AddCompanyIdToContacts company_id:integer
+```
+
+Now let's edit the migration file to add our foreign key
+
+```ruby
+class AddCompanyIdToContacts < ActiveRecord::Migration
+  def up
+    add_column :contacts, :company_id, :integer
+    add_foreign_key :contacts, :companies, column: :company_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+  end
+
+  def down
+    remove_foreign_key :contacts, column: :company_id
+    remove_column :contacts, :company_id
+  end
+end
+```
+
 ## Boostrap
 
 Let's add Bootstrap and Font Awesome to our Gemfile.
@@ -252,6 +282,27 @@ class AddUserIdToCompanies < ActiveRecord::Migration
   def down
     remove_foreign_key :companies, column: :user_id
     remove_column :companies, :user_id
+  end
+end
+```
+Do the same for Contacts
+
+```ruby
+rails g migration AddUserIdToContacts user_id:integer
+```
+
+And add it's foreign keys to its migration:
+
+```ruby
+class AddUserIdToContacts < ActiveRecord::Migration
+  def up
+    add_column :contacts, :user_id, :integer
+    add_foreign_key :contacts, :users, column: :user_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+  end
+
+  def down
+    remove_foreign_key :contacts, column: :user_id
+    remove_column :contacts, :user_id
   end
 end
 ```
