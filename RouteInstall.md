@@ -96,7 +96,7 @@ rails g model State name:string abbrev:string
 Create the model for the icons. 
 
 ```console
-rails g model Icon description:string fontawesome:string bootstrap:string example:attachment
+rails g model Icon name:string fontawesome:string bootstrap:string
 ```
 
 ## Devise
