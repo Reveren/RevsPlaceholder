@@ -668,11 +668,28 @@ company_list = [
   ['Apple', '1 Infinite Loop', 'Cupertino', '5', '95014', '', '1', '1'],
   ['Facebook', '1 Hacker Way', 'Menlo Park', '5', '94025', '', '1', '1'],
   ['Google', '1600 Amphitheatre Parkway', 'Mountain View', '5', '94043', '', '1', '1'],
-  ['LinkedIn', '2029 Stierlin Ct', 'Mountain View', '5', '94043', '', '0', '1']
+  ['Microsoft', 'One Microsoft Way', 'Redmond', '48', '98052', '', '0', '1']
 ]
 
 company_list.each do |name, address, city, state_id, zip, notes, active, user_id|
   Company.create( name: name, address: address,  city: city, state_id: state_id, zip: zip, notes: notes, active: active, user_id: user_id)
+end
+
+# ############## Contacts  ################
+# This is to set up data to test with.   
+# Make sure companies are setup first.
+# #########################################
+
+contact_list = [
+  ['1','1','Jack','Dorsey','CEO','(415) 222-9670','','','Notes go here.','1'],
+  ['1','2','Tim','Cook','CEO','(800) 692–7753','','','Notes go here.','1'],
+  ['1','3','Mark','Zuckerberg','CEO','(650) 543-4800','','','Notes go here.','1'],
+  ['1','4','Sundar','Pichai','CEO','(650) 253-0000','','','Notes go here.','1'],
+  ['1','5','Satya','Nadella','CEO','(425) 882-8080','','','Notes go here.','1'],
+]
+
+contact_list.each do |user_id, company_id, first_name, last_name, title, phone, alt_phone, email, notes, active|
+  Contact.create(user_id: user_id, company_id: company_id, first_name: first_name, last_name: last_name, title: title, phone: phone, alt_phone: alt_phone, email: email, notes: notes, active: active)
 end
 ```
 
