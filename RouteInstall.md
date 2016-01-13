@@ -117,7 +117,7 @@ rails g devise:views
 Let's use a scaffold to save some time. We will build the Company controller first. 
 
 ```console
-rails g scaffold Company name address city state_id:integer zip:integer notes:text
+rails g scaffold Company user_id:integer name address city state_id:integer zip:integer notes:text
 ```
 
 Add foreign keys to migration.
@@ -146,7 +146,7 @@ end
 Now let's build the Contacts.
 
 ```console
-rails g scaffold Contact first_name last_name title phone alt_phone email notes:text
+rails g scaffold Contact user_id:integer first_name last_name title phone alt_phone email notes:text
 ```
 
 Add foreign keys to migration.
