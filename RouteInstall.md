@@ -146,7 +146,7 @@ end
 Now let's build the Contacts.
 
 ```console
-rails g scaffold Contact user_id:integer first_name last_name title phone alt_phone email notes:text
+rails g scaffold Contact user_id:integer company_id:integer first_name last_name title phone alt_phone email notes:text
 ```
 
 Add foreign keys to migration.
