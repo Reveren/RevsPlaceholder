@@ -72,7 +72,7 @@ During this setup, I'm only going to run `rake db-migrate` only once at the end.
 
 Create the model for the days. 
 
-```console
+```ruby
 rails g model Day name:string abbrev:string
 ```
 
