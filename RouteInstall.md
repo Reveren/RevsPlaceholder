@@ -133,7 +133,6 @@ class CreateCompanies < ActiveRecord::Migration
       t.integer :state_id
       t.integer :zip
       t.text :notes
-      t.boolean :active
 
       t.timestamps null: false
     end
@@ -165,7 +164,6 @@ class CreateContacts < ActiveRecord::Migration
       t.string :alt_phone
       t.string :email
       t.text :notes
-      t.boolean :active
 
       t.timestamps null: false
     end
@@ -181,7 +179,7 @@ end
 Now let's build the Stops.
 
 ```console
-rails g scaffold Stop user_id:integer company_id:integer contact_id:integer day_id:integer active:boolean week notes:text
+rails g scaffold Stop user_id:integer company_id:integer contact_id:integer day_id:integer week:integer notes:text active:boolean
 ```
 
 Add foreign keys to migration.
@@ -194,9 +192,9 @@ class CreateStops < ActiveRecord::Migration
       t.integer :company_id
       t.integer :contact_id
       t.integer :day_id
-      t.boolean :active
-      t.string :week
+      t.integer :week
       t.text :notes
+      t.boolean :active
 
       t.timestamps null: false
     end
