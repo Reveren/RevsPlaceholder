@@ -6,13 +6,13 @@ EXAMPLE OF MY CURRENT PROJECT
 First we'll create a new project
 
 ```console
-rails new SOMENAME
+rails new example
 ```
 
 cd into directory
 
 ```console
-cd SOMENAME
+cd example
 ```
 
 Now we need to change the Gemfile a little to load some of our first add-ons. These are a collection of some of my most used and future to be used addons. Note that the versions might change from the original Gemfile and the pasted text below. (more specifically, take note of rails version)
@@ -57,14 +57,6 @@ end
 gem 'bootstrap-sass'
 gem 'font-awesome-rails'
 gem 'devise'
-# gem 'growlyflash'
-# gem 'paperclip'
-# gem 'groupdate'
-# 
-# gem 'friendly_id'
-# gem 'kaminari'
-# gem 'bootstrap-kaminari-views'
-# gem 'administrate'
 ```
 
 Now run bundle install.
