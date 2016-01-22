@@ -370,7 +370,7 @@ to this:
 
 ```ruby
 def index
-  @companies = current_user.companies.all
+  @companies = Company.all.where(user_id: current_user)
 end
 ```
 
@@ -412,7 +412,7 @@ to this:
 
 ```ruby
 def index
-  @contacts = current_user.contacts.all
+  @contacts = Contact.all.where(user_id: current_user)
 end
 ```
 
@@ -454,7 +454,7 @@ to this:
 
 ```ruby
 def index
-  @stops = current_user.stops.all
+  @stops = Stop.all.where(user_id: current_user)
 end
 ```
 
@@ -496,7 +496,7 @@ to this:
 
 ```ruby
 def index
-  @updates = current_user.updates.all
+  @updates = Update.all.where(user_id: current_user)
 end
 ```
 
