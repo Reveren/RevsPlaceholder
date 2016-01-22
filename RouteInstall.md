@@ -76,6 +76,14 @@ Create the model for the days.
 rails g model Day name:string abbrev:string
 ```
 
+## Weeks
+
+Create the model for the weeks. 
+
+```console
+rails g model Week description:string abbrev:string
+```
+
 ## States
 
 Create the model for the days. 
