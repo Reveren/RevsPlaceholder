@@ -66,7 +66,7 @@ Now run bundle install.
 bundle install
 ```
 
-During this setup, I'm only going to run `rake db-migrate` only once at the end. This will save some time, but will make error debugging a little bit more difficult further down the road if you missed something. 
+During this setup, I'm only going to run `rake db-migrate` only once at the end. This will save some time, but will make error debugging a little bit more difficult during this setup. I highly recommend running `rake db:migrate` after each instance of running `rails generate` or the shortcut version `rails g`.
 
 ## Days
 
