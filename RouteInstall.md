@@ -574,12 +574,20 @@ We're almost ready to migrate, but first you need to fill in your seed file with
 Open the seed file in `db/seeds.rb` and paste this info. 
  
  ```ruby
+# This file should contain all the record creation needed to seed the database with its default values.
+# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
+#
+# Examples:
+#
+#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
+#   Mayor.create(name: 'Emanuel', city: cities.first)
+
 # ### Days of the week ####################
 # This is to set up the days of the week
 # #########################################
 
-  
-  
+
+
 day_list = [
   ['Sunday', 'Sun'],
   ['Monday', 'Mon'],
@@ -594,62 +602,78 @@ day_list.each do |name, abbrev|
   Day.create( name: name, abbrev: abbrev )
 end
 
+
+# ### Days of the week ####################
+# This is to set up the days of the week
+# #########################################
+
+week_list = [
+  ['Every Week', 'Weekly'],
+  ['Every Odd Week', 'Odd week'],
+  ['Every Even Week', 'Even week'],
+  ['Every Three Weeks', '3 weeks']
+]
+
+week_list.each do |description, abbrev|
+  Week.create( description: description, abbrev: abbrev )
+end
+
 # ### US States ###########################
 # This is to set up all the US states  
 # #########################################
 
 state_list = [
-	['Alaska','AK'],
-	['Alabama','AL'],
-	['Arizona','AZ'],
-	['Arkansas','AR'],
-	['California','CA'],
-	['Colorado','CO'],
-	['Connecticut','CT'],
-	['Delaware','DE'],
-	['District of Columbia','DC'],
-	['Florida','FL'],
-	['Georgia','GA'],
-	['Hawaii','HI'],
-	['Idaho','ID'],
-	['Illinois','IL'],
-	['Indiana','IN'],
-	['Iowa','IA'],
-	['Kansas','KS'],
-	['Kentucky','KY'],
-	['Louisiana','LA'],
-	['Maine','ME'],
-	['Maryland','MD'],
-	['Massachusetts','MA'],
-	['Michigan','MI'],
-	['Minnesota','MN'],
-	['Mississippi','MS'],
-	['Missouri','MO'],
-	['Montana','MT'],
-	['Nebraska','NE'],
-	['Nevada','NV'],
-	['New Hampshire','NH'],
-	['New Jersey','NJ'],
-	['New Mexico','NM'],
-	['New York','NY'],
-	['North Carolina','NC'],
-	['North Dakota','ND'],
-	['Ohio','OH'],
-	['Oklahoma','OK'],
-	['Oregon','OR'],
-	['Pennsylvania','PA'],
-	['Rhode Island','RI'],
-	['South Carolina','SC'],
-	['South Dakota','SD'],
-	['Tennessee','TN'],
-	['Texas','TX'],
-	['Utah','UT'],
-	['Vermont','VT'],
-	['Virginia','VA'],
-	['Washington','WA'],
-	['West Virginia','WV'],
-	['Wisconsin','WI'],
-	['Wyoming','WY']
+    ['Alaska','AK'],
+    ['Alabama','AL'],
+    ['Arizona','AZ'],
+    ['Arkansas','AR'],
+    ['California','CA'],
+    ['Colorado','CO'],
+    ['Connecticut','CT'],
+    ['Delaware','DE'],
+    ['District of Columbia','DC'],
+    ['Florida','FL'],
+    ['Georgia','GA'],
+    ['Hawaii','HI'],
+    ['Idaho','ID'],
+    ['Illinois','IL'],
+    ['Indiana','IN'],
+    ['Iowa','IA'],
+    ['Kansas','KS'],
+    ['Kentucky','KY'],
+    ['Louisiana','LA'],
+    ['Maine','ME'],
+    ['Maryland','MD'],
+    ['Massachusetts','MA'],
+    ['Michigan','MI'],
+    ['Minnesota','MN'],
+    ['Mississippi','MS'],
+    ['Missouri','MO'],
+    ['Montana','MT'],
+    ['Nebraska','NE'],
+    ['Nevada','NV'],
+    ['New Hampshire','NH'],
+    ['New Jersey','NJ'],
+    ['New Mexico','NM'],
+    ['New York','NY'],
+    ['North Carolina','NC'],
+    ['North Dakota','ND'],
+    ['Ohio','OH'],
+    ['Oklahoma','OK'],
+    ['Oregon','OR'],
+    ['Pennsylvania','PA'],
+    ['Rhode Island','RI'],
+    ['South Carolina','SC'],
+    ['South Dakota','SD'],
+    ['Tennessee','TN'],
+    ['Texas','TX'],
+    ['Utah','UT'],
+    ['Vermont','VT'],
+    ['Virginia','VA'],
+    ['Washington','WA'],
+    ['West Virginia','WV'],
+    ['Wisconsin','WI'],
+    ['Wyoming','WY']
 ]
 
 state_list.each do |name, abbrev|
@@ -676,15 +700,15 @@ end
 # #########################################
 
 company_list = [
-  ['Twitter', '1355 Market Street', 'San Francisco', '5', '94103', '', '1', '1'],
-  ['Apple', '1 Infinite Loop', 'Cupertino', '5', '95014', '', '1', '1'],
-  ['Facebook', '1 Hacker Way', 'Menlo Park', '5', '94025', '', '1', '1'],
-  ['Google', '1600 Amphitheatre Parkway', 'Mountain View', '5', '94043', '', '1', '1'],
-  ['Microsoft', 'One Microsoft Way', 'Redmond', '48', '98052', '', '0', '1']
+  ['Twitter', '1355 Market Street', 'San Francisco', '5', '94103', '', '1'],
+  ['Apple', '1 Infinite Loop', 'Cupertino', '5', '95014', '', '1'],
+  ['Facebook', '1 Hacker Way', 'Menlo Park', '5', '94025', '', '1'],
+  ['Google', '1600 Amphitheatre Parkway', 'Mountain View', '5', '94043', '', '1'],
+  ['Microsoft', 'One Microsoft Way', 'Redmond', '48', '98052', '', '1']
 ]
 
-company_list.each do |name, address, city, state_id, zip, notes, active, user_id|
-  Company.create( name: name, address: address,  city: city, state_id: state_id, zip: zip, notes: notes, active: active, user_id: user_id)
+company_list.each do |name, address, city, state_id, zip, notes, user_id|
+  Company.create( name: name, address: address,  city: city, state_id: state_id, zip: zip, notes: notes, user_id: user_id)
 end
 
 # ############## Contacts  ################
@@ -693,15 +717,15 @@ end
 # #########################################
 
 contact_list = [
-  ['1','1','Jack','Dorsey','CEO','(415) 222-9670','','','Notes go here.','1'],
-  ['1','2','Tim','Cook','CEO','(800) 692–7753','','','Notes go here.','1'],
-  ['1','3','Mark','Zuckerberg','CEO','(650) 543-4800','','','Notes go here.','1'],
-  ['1','4','Sundar','Pichai','CEO','(650) 253-0000','','','Notes go here.','1'],
-  ['1','5','Satya','Nadella','CEO','(425) 882-8080','','','Notes go here.','1'],
+  ['1','1','Jack','Dorsey','CEO','(415) 222-9670','','',''],
+  ['1','2','Tim','Cook','CEO','(800) 692–7753','','',''],
+  ['1','3','Mark','Zuckerberg','CEO','(650) 543-4800','','',''],
+  ['1','4','Sundar','Pichai','CEO','(650) 253-0000','','',''],
+  ['1','5','Satya','Nadella','CEO','(425) 882-8080','','',''],
 ]
 
-contact_list.each do |user_id, company_id, first_name, last_name, title, phone, alt_phone, email, notes, active|
-  Contact.create(user_id: user_id, company_id: company_id, first_name: first_name, last_name: last_name, title: title, phone: phone, alt_phone: alt_phone, email: email, notes: notes, active: active)
+contact_list.each do |user_id, company_id, first_name, last_name, title, phone, alt_phone, email, notes|
+  Contact.create(user_id: user_id, company_id: company_id, first_name: first_name, last_name: last_name, title: title, phone: phone, alt_phone: alt_phone, email: email, notes: notes)
 end
 ```
 
