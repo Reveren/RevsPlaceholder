@@ -262,16 +262,22 @@ config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
 Now let's adjust our models to compensate for our foreign keys. 
 
-**State**
-
-```ruby
-  has_one :company
-```
-
 **Day**
 
 ```ruby
   has_many :stops
+```
+
+**Week**
+
+```ruby
+  has_many :stops
+```
+
+**State**
+
+```ruby
+  has_one :company
 ```
 
 **Icon**
@@ -284,7 +290,11 @@ Now let's adjust our models to compensate for our foreign keys.
 
 ```ruby
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable 
+  
   has_many :companies
+  has_many :contacts
+  has_many :stops
+  has_many :updates
 ```
 
 **Company**
@@ -298,6 +308,7 @@ Now let's adjust our models to compensate for our foreign keys.
 
 ```ruby
   has_many :stops, dependent: :destroy
+  belongs_to :user
   belongs_to :company
 ```
 
@@ -305,14 +316,16 @@ Now let's adjust our models to compensate for our foreign keys.
 
 ```ruby
   belongs_to :user
+  belongs_to :company
   belongs_to :contact
   belongs_to :day
-  belongs_to :company
-```
+  belongs_to :week
+ ```
 
 **Update**
 
 ```ruby
+  belongs_to :user
   belongs_to :company
   belongs_to :icon
 ```
