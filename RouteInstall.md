@@ -187,7 +187,7 @@ end
 Now let's build the Stops.
 
 ```console
-rails g scaffold Stop user_id:integer company_id:integer contact_id:integer day_id:integer week:integer notes:text active:boolean
+rails g scaffold Stop user_id:integer company_id:integer contact_id:integer day_id:integer week_id:integer notes:text active:boolean
 ```
 
 Add foreign keys to migration.
