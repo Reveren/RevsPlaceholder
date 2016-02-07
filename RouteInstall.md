@@ -243,68 +243,6 @@ registrations/edit.html.erb:
      <%= f.email_field :email %></p>
 ```
 
-Allow users to recover their password or confirm their account using their username
-
-This section assumes you have run through the steps in Allow users to Sign In using their username or email.
-
-Simply modify config/initializers/devise.rb to have:
-
-```ruby
-config.reset_password_keys = [ :username ]
-config.confirmation_keys = [ :username ]
-```
-
-Use `find_first_by_auth_conditions` instead of `find_for_database_authentication`
-
-Replace (in your Users.rb):
-
-```ruby
-def self.find_for_database_authentication(warden_conditions)
-  conditions = warden_conditions.dup
-  if login = conditions.delete(:login)
-    where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
-  else
-    where(conditions).first
-  end
-end
-```
-
-with:
-
-```ruby
-def self.find_first_by_auth_conditions(warden_conditions)
-  conditions = warden_conditions.dup
-  if login = conditions.delete(:login)
-    where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
-  else
-    if conditions[:username].nil?
-      where(conditions).first
-    else
-      where(username: conditions[:username]).first
-    end
-  end
-end
-```
-
-*Update your views*
-
-passwords/new.html.erb:
-
-```console
-  -  <p><%= f.label :email %><br />
-  -  <%= f.email_field :email %></p>
-  +  <p><%= f.label :username %><br />
-  +  <%= f.text_field :username %></p>
-```
-
-confirmations/new.html.erb:
-
-```console
-  -  <p><%= f.label :email %><br />
-  -  <%= f.email_field :email %></p>
-  +  <p><%= f.label :username %><br />
-  +  <%= f.text_field :username %></p>
-```
 
 
 ## Company
