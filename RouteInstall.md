@@ -114,10 +114,10 @@ The generator will install an initializer which describes ALL of Devise's config
 rails generate devise User
 ```
 
-Build the views so you can customize the templates later.
+Build the views so you can customize the templates later (in our views/users folder).
 
 ```console
-rails g devise:views
+rails g devise:views users
 ```
 
 ## Company
