@@ -120,11 +120,192 @@ Build the views so you can customize the templates later (in our views/users fol
 rails generate devise:views users
 ```
 
-Build the Devise controller so you can alter the templates at controller level
+Add username to Users, since it is not in there by default with Devise
 
 ```console
-rails generate devise:controllers users
+rails generate migration add_username_to_users username:string:uniq
 ```
+
+Run rake db:migrate
+
+```console
+rake db:migrate
+```
+
+Modify `application_controller.rb` and add username, email, password, password confirmation and remember me to `configure_permitted_parameters`
+
+```ruby
+class ApplicationController < ActionController::Base
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :remember_me) }
+    devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }
+    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation, :current_password) }
+  end
+end
+```
+
+Create a login virtual attribute in the `User` model
+
+Add `login` as an `attr_accessor`:
+
+```ruby
+  # Virtual attribute for authenticating by either username or email
+  # This is in addition to a real persisted field like 'username'
+  attr_accessor :login
+```
+
+Tell Devise to use `:login` in the `authentication_keys`
+
+Modify `config/initializers/devise.rb` to have:
+
+```ruby
+config.authentication_keys = [ :login ]
+```
+
+Overwrite Devise's `find_for_database_authentication` method in `User` model
+
+```ruby
+# app/models/user.rb
+
+    def self.find_for_database_authentication(warden_conditions)
+      conditions = warden_conditions.dup
+      if login = conditions.delete(:login)
+        where(conditions.to_hash).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+      elsif conditions.has_key?(:username) || conditions.has_key?(:email)
+        conditions[:email].downcase! if conditions[:email]
+        where(conditions.to_hash).first
+      end
+    end
+```
+
+Be sure to add case **insensitivity** to your validations on `:username`:
+
+```ruby
+# app/models/user.rb
+
+validates :username,
+  :presence => true,
+  :uniqueness => {
+    :case_sensitive => false
+  } # etc.
+```
+
+Vaidate User.rb
+
+```ruby
+# app/models/user.rb
+
+validate :validate_username
+
+def validate_username
+  if User.where(email: username).exists?
+    errors.add(:username, :invalid)
+  end
+end
+```
+
+Modify `config/initializers/devise.rb` file to have
+
+```ruby
+config.scoped_views = true
+```
+
+*Modify the views*
+
+sessions/new.html.erb:
+
+```console
+  -  <p><%= f.label :email %><br />
+  -  <%= f.email_field :email %></p>
+  +  <p><%= f.label :login %><br />
+  +  <%= f.text_field :login %></p>
+```
+
+registrations/new.html.erb:
+
+```console
+  +  <p><%= f.label :username %><br />
+  +  <%= f.text_field :username %></p>
+     <p><%= f.label :email %><br />
+     <%= f.email_field :email %></p>
+```
+
+registrations/edit.html.erb:
+
+```console
+  +  <p><%= f.label :username %><br />
+  +  <%= f.text_field :username %></p>
+     <p><%= f.label :email %><br />
+     <%= f.email_field :email %></p>
+```
+
+Allow users to recover their password or confirm their account using their username
+
+This section assumes you have run through the steps in Allow users to Sign In using their username or email.
+
+Simply modify config/initializers/devise.rb to have:
+
+```ruby
+config.reset_password_keys = [ :username ]
+config.confirmation_keys = [ :username ]
+```
+
+Use `find_first_by_auth_conditions` instead of `find_for_database_authentication`
+
+Replace (in your Users.rb):
+
+```ruby
+def self.find_for_database_authentication(warden_conditions)
+  conditions = warden_conditions.dup
+  if login = conditions.delete(:login)
+    where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+  else
+    where(conditions).first
+  end
+end
+```
+
+with:
+
+```ruby
+def self.find_first_by_auth_conditions(warden_conditions)
+  conditions = warden_conditions.dup
+  if login = conditions.delete(:login)
+    where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+  else
+    if conditions[:username].nil?
+      where(conditions).first
+    else
+      where(username: conditions[:username]).first
+    end
+  end
+end
+```
+
+*Update your views*
+
+passwords/new.html.erb:
+
+```console
+  -  <p><%= f.label :email %><br />
+  -  <%= f.email_field :email %></p>
+  +  <p><%= f.label :username %><br />
+  +  <%= f.text_field :username %></p>
+```
+
+confirmations/new.html.erb:
+
+```console
+  -  <p><%= f.label :email %><br />
+  -  <%= f.email_field :email %></p>
+  +  <p><%= f.label :username %><br />
+  +  <%= f.text_field :username %></p>
+```
+
 
 ## Company
 
