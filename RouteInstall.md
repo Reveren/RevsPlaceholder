@@ -120,6 +120,12 @@ Build the views so you can customize the templates later (in our views/users fol
 rails g devise:views users
 ```
 
+Build the Devise controllers so you can alter teh template at controller level
+
+```console
+rails generate devise:controllers users
+```
+
 ## Company
 
 Let's use a scaffold to save some time. We will build the Company controller first. 
