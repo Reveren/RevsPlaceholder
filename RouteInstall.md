@@ -117,10 +117,10 @@ rails generate devise User
 Build the views so you can customize the templates later (in our views/users folder).
 
 ```console
-rails g devise:views users
+rails generate devise:views users
 ```
 
-Build the Devise controllers so you can alter teh template at controller level
+Build the Devise controller so you can alter the templates at controller level
 
 ```console
 rails generate devise:controllers users
