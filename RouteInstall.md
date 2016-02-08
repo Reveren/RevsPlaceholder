@@ -202,9 +202,9 @@ class User < ActiveRecord::Base
 end
 ```
 
-*Modify the views*
+**Modify the views**
 
-sessions/new.html.erb:
+***sessions/new.html.erb:***
 
 ```console
   -  <p><%= f.label :email %><br />
@@ -213,7 +213,25 @@ sessions/new.html.erb:
   +  <%= f.text_field :login %></p>
 ```
 
-registrations/new.html.erb:
+Or just change this:
+
+```console
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true %>
+  </div>
+```
+
+to this:
+
+```console
+  <div class="field">
+    <%= f.label :login %><br />
+    <%= f.text_field :login, autofocus: true %></p>
+  </div>
+```
+
+***registrations/new.html.erb:***
 
 ```console
   +  <p><%= f.label :username %><br />
@@ -222,7 +240,16 @@ registrations/new.html.erb:
      <%= f.email_field :email %></p>
 ```
 
-registrations/edit.html.erb:
+Or just add this:
+
+```console
+  <div class="field">
+    <%= f.label :username %><br />
+    <%= f.text_field :username, autofocus: true %>
+  </div>
+```
+
+*registrations/edit.html.erb:*
 
 ```console
   +  <p><%= f.label :username %><br />
@@ -231,6 +258,14 @@ registrations/edit.html.erb:
      <%= f.email_field :email %></p>
 ```
 
+Or just add this:
+
+```console
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true %>
+  </div>
+```
 
 
 ## Company
