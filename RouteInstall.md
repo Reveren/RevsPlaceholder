@@ -208,16 +208,9 @@ end
 
 ***sessions/new.html.erb:***
 
-```console
-  -  <p><%= f.label :email %><br />
-  -  <%= f.email_field :email %></p>
-  +  <p><%= f.label :login %><br />
-  +  <%= f.text_field :login %></p>
-```
+Change this:
 
-Or just change this:
-
-```console
+```ruby
   <div class="field">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true %>
@@ -226,7 +219,7 @@ Or just change this:
 
 to this:
 
-```console
+```ruby
   <div class="field">
     <%= f.label :login %><br />
     <%= f.text_field :login, autofocus: true %></p>
@@ -235,16 +228,9 @@ to this:
 
 ***registrations/new.html.erb:***
 
-```console
-  +  <p><%= f.label :username %><br />
-  +  <%= f.text_field :username %></p>
-     <p><%= f.label :email %><br />
-     <%= f.email_field :email %></p>
-```
+Add this:
 
-Or just add this:
-
-```console
+```ruby
   <div class="field">
     <%= f.label :username %><br />
     <%= f.text_field :username, autofocus: true %>
@@ -253,16 +239,9 @@ Or just add this:
 
 ***registrations/edit.html.erb:***
 
-```console
-  +  <p><%= f.label :username %><br />
-  +  <%= f.text_field :username %></p>
-     <p><%= f.label :email %><br />
-     <%= f.email_field :email %></p>
-```
+Add this:
 
-Or just add this:
-
-```console
+```ruby
   <div class="field">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true %>
