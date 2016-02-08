@@ -371,12 +371,37 @@ class CreateNotes < ActiveRecord::Migration
 end
 ```
 
+## Homepages
+
+Now let's build the two homepages.
+
+```console
+rails generate controller Home index welcome
+```
+
 ## Routes
 
 Adjust your `routes.rb` file to make a landing page. Also remove the notes in there. 
 
 ```ruby
-root to: "companies#index"
+Rails.application.routes.draw do
+
+  devise_for :users
+  
+  authenticated do
+    root :to => 'home#index', as: :authenticated
+  end
+  
+  root :to => 'home#welcome'
+  
+  resources :updates
+  resources :contacts
+  resources :companies  
+  resources :stops do
+    put :sort, on: :collection
+  end
+
+end
 ```
 
 ## Config
