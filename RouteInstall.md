@@ -348,15 +348,15 @@ end
 Now let's build the Timeline Updates.
 
 ```console
-rails g scaffold Update user_id:integer stop_id:integer icon_id:integer notes:text
+rails g scaffold Note user_id:integer stop_id:integer icon_id:integer notes:text
 ```
 
 Add foreign keys to migration.
 
 ```ruby
-class CreateUpdates < ActiveRecord::Migration
+class CreateNotes < ActiveRecord::Migration
   def change
-    create_table :updates do |t|
+    create_table :notes do |t|
       t.integer :user_id
       t.integer :stop_id
       t.integer :icon_id
@@ -364,9 +364,9 @@ class CreateUpdates < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_foreign_key :updates, :users, column: :user_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :updates, :stops, column: :stop_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :updates, :icons, column: :icon_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :notes, :users, column: :user_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :notes, :stops, column: :stop_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :notes, :icons, column: :icon_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
   end
 end
 ```
@@ -412,18 +412,16 @@ Now let's adjust our models to compensate for our foreign keys.
 **Icon**
 
 ```ruby
-  has_many :updates
+  has_many :notes
 ```
 
 **User**
 
 ```ruby
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable 
-  
   has_many :companies
   has_many :contacts
   has_many :stops
-  has_many :updates
+  has_many :notes
 ```
 
 **Company**
@@ -431,6 +429,7 @@ Now let's adjust our models to compensate for our foreign keys.
 ```ruby
   belongs_to :user
   belongs_to :state
+  has_many :notes
 ```
 
 **Contact**
@@ -451,7 +450,7 @@ Now let's adjust our models to compensate for our foreign keys.
   belongs_to :week
  ```
 
-**Update**
+**Note**
 
 ```ruby
   belongs_to :user
@@ -587,7 +586,7 @@ def index
 end
 ```
 
-### updates_controller.rb
+### notes_controller.rb
 
 Make sure only logged-in users can see the content.
 
@@ -601,14 +600,14 @@ Change this line:
 
 ```ruby
 def create
-  @update = Update.new(update_params)
+  @note = Note.new(update_params)
 ```
 
 to this:
 
 ```ruby
 def create
-  @update = current_user.updates.new(update_params)
+  @note = current_user.notes.new(update_params)
 ```
 
 We also need to make sure the logged-in user can only see what they created.
@@ -617,7 +616,7 @@ Change the index definition from this:
 
 ```ruby
 def index
-  @updates = Update.all
+  @notes = Note.all
 end
 ```
 
@@ -625,7 +624,7 @@ to this:
 
 ```ruby
 def index
-  @updates = Update.all.where(user_id: current_user)
+  @notes = Note.all.where(user_id: current_user)
 end
 ```
 
