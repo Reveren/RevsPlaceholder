@@ -162,7 +162,9 @@ Modify `config/initializers/devise.rb` file to have
 config.scoped_views = true
 ```
 
-Overwrite Devise's `find_for_database_authentication` method in `User` model as well as be sure to add case **insensitivity** to your validations on `:username`, and add validations. Basically your user.rb should look like this at this point:
+In the `User` model, overwrite Devise's `find_for_database_authentication` method. Also, be sure to add case *insensitivity* to your validations on `:username`. Alos add other validations. 
+
+Basically your `user.rb` should look like this now:
 
 ```ruby
 class User < ActiveRecord::Base
@@ -249,7 +251,7 @@ Or just add this:
   </div>
 ```
 
-*registrations/edit.html.erb:*
+***registrations/edit.html.erb:***
 
 ```console
   +  <p><%= f.label :username %><br />
