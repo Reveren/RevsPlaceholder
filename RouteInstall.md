@@ -210,7 +210,7 @@ end
 
 Change this:
 
-```ruby
+```html
   <div class="field">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true %>
@@ -219,7 +219,7 @@ Change this:
 
 to this:
 
-```ruby
+```html
   <div class="field">
     <%= f.label :login %><br />
     <%= f.text_field :login, autofocus: true %></p>
