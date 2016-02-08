@@ -686,6 +686,18 @@ def index
 end
 ```
 
+### home_controller.rb
+
+Change the layout of the welcome page so it does not contain the navbar.
+
+```ruby
+  def welcome
+    render layout: "empty"
+  end
+```
+
+Now in the `views/layout` folder, duplicate the `application.html.erb` file to `empty.html.erb`
+
 ## Boostrap
 
 ### CSS 
