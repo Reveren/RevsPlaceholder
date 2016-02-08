@@ -437,7 +437,7 @@ Now let's adjust our models to compensate for our foreign keys.
 **Icon**
 
 ```ruby
-  has_many :notes
+  has_many :tupdates
 ```
 
 **User**
@@ -446,7 +446,7 @@ Now let's adjust our models to compensate for our foreign keys.
   has_many :companies
   has_many :contacts
   has_many :stops
-  has_many :notes
+  has_many :tupdates
 ```
 
 **Company**
