@@ -644,7 +644,7 @@ def index
 end
 ```
 
-### notes_controller.rb
+### tupdates_controller.rb
 
 Make sure only logged-in users can see the content.
 
@@ -658,14 +658,14 @@ Change this line:
 
 ```ruby
 def create
-  @note = Note.new(update_params)
+  @note = Tupdate.new(update_params)
 ```
 
 to this:
 
 ```ruby
 def create
-  @note = current_user.notes.new(update_params)
+  @note = current_user.tupdates.new(update_params)
 ```
 
 We also need to make sure the logged-in user can only see what they created.
@@ -674,7 +674,7 @@ Change the index definition from this:
 
 ```ruby
 def index
-  @notes = Note.all
+  @notes = Tupdate.all
 end
 ```
 
@@ -682,7 +682,7 @@ to this:
 
 ```ruby
 def index
-  @notes = Note.all.where(user_id: current_user)
+  @notes = Tupdate.all.where(user_id: current_user)
 end
 ```
 
