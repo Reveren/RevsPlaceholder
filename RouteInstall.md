@@ -886,11 +886,11 @@ end
 # #########################################
 
 user_list = [
-  ['user@example.com', 'admin', 'admin']
+  ['user@example.com', 'password', 'password', 'admin']
 ]
 
-user_list.each do |email, password, password_confirmation|
-  User.create( email: email, password: password,  password_confirmation: password_confirmation)
+user_list.each do |email, password, password_confirmation, username|
+  User.create( email: email, password: password,  password_confirmation: password_confirmation, username: username)
 end
 
 
