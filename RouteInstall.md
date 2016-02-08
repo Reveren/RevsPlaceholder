@@ -696,6 +696,8 @@ Change the layout of the welcome page so it does not contain the navbar.
   end
 ```
 
+### Duplicate `application.html.erb`
+
 Now in the `views/layout` folder, duplicate the `application.html.erb` file to `empty.html.erb`
 
 ## Boostrap
