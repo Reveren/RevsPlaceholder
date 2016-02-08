@@ -166,6 +166,12 @@ Modify `config/initializers/devise.rb` to have:
 config.authentication_keys = [ :login ]
 ```
 
+Modify `config/initializers/devise.rb` file to have
+
+```ruby
+config.scoped_views = true
+```
+
 Overwrite Devise's `find_for_database_authentication` method in `User` model
 
 ```ruby
@@ -206,12 +212,6 @@ def validate_username
     errors.add(:username, :invalid)
   end
 end
-```
-
-Modify `config/initializers/devise.rb` file to have
-
-```ruby
-config.scoped_views = true
 ```
 
 *Modify the views*
