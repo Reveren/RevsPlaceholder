@@ -394,7 +394,7 @@ Rails.application.routes.draw do
   
   root :to => 'home#welcome'
   
-  resources :updates
+  resources :notes
   resources :contacts
   resources :companies  
   resources :stops do
