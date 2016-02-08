@@ -148,16 +148,6 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-Create a login virtual attribute in the `User` model
-
-Add `login` as an `attr_accessor`:
-
-```ruby
-  # Virtual attribute for authenticating by either username or email
-  # This is in addition to a real persisted field like 'username'
-  attr_accessor :login
-```
-
 Tell Devise to use `:login` in the `authentication_keys`
 
 Modify `config/initializers/devise.rb` to have:
@@ -172,45 +162,43 @@ Modify `config/initializers/devise.rb` file to have
 config.scoped_views = true
 ```
 
-Overwrite Devise's `find_for_database_authentication` method in `User` model
+Overwrite Devise's `find_for_database_authentication` method in `User` model as well as be sure to add case **insensitivity** to your validations on `:username`, and add validations. Basically your user.rb should look like this at this point:
 
 ```ruby
-# app/models/user.rb
+class User < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
 
-    def self.find_for_database_authentication(warden_conditions)
-      conditions = warden_conditions.dup
-      if login = conditions.delete(:login)
-        where(conditions.to_hash).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
-      elsif conditions.has_key?(:username) || conditions.has_key?(:email)
-        conditions[:email].downcase! if conditions[:email]
-        where(conditions.to_hash).first
-      end
+  # Virtual attribute for authenticating by either username or email
+  # This is in addition to a real persisted field like 'username'
+  attr_accessor :login
+
+  validates :username,
+    :presence => true,
+    :uniqueness => {
+      :case_sensitive => false
+    }
+
+  validate :validate_username
+  
+  def validate_username
+    if User.where(email: username).exists?
+      errors.add(:username, :invalid)
     end
-```
-
-Be sure to add case **insensitivity** to your validations on `:username`:
-
-```ruby
-# app/models/user.rb
-
-validates :username,
-  :presence => true,
-  :uniqueness => {
-    :case_sensitive => false
-  } # etc.
-```
-
-Vaidate User.rb
-
-```ruby
-# app/models/user.rb
-
-validate :validate_username
-
-def validate_username
-  if User.where(email: username).exists?
-    errors.add(:username, :invalid)
   end
+
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions.to_hash).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+    elsif conditions.has_key?(:username) || conditions.has_key?(:email)
+      conditions[:email].downcase! if conditions[:email]
+      where(conditions.to_hash).first
+    end
+  end
+
 end
 ```
 
