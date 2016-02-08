@@ -348,15 +348,15 @@ end
 Now let's build the Timeline Updates.
 
 ```console
-rails g scaffold Note user_id:integer stop_id:integer icon_id:integer notes:text
+rails g scaffold Tupdate user_id:integer stop_id:integer icon_id:integer notes:text
 ```
 
 Add foreign keys to migration.
 
 ```ruby
-class CreateNotes < ActiveRecord::Migration
+class CreateTupdates < ActiveRecord::Migration
   def change
-    create_table :notes do |t|
+    create_table :Tupdates do |t|
       t.integer :user_id
       t.integer :stop_id
       t.integer :icon_id
@@ -364,9 +364,9 @@ class CreateNotes < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_foreign_key :notes, :users, column: :user_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :notes, :stops, column: :stop_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :notes, :icons, column: :icon_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :Tupdates, :users, column: :user_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :Tupdates, :stops, column: :stop_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :Tupdates, :icons, column: :icon_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
   end
 end
 ```
@@ -394,7 +394,7 @@ Rails.application.routes.draw do
   
   root :to => 'home#welcome'
   
-  resources :notes
+  resources :tupdates
   resources :contacts
   resources :companies  
   resources :stops do
@@ -454,7 +454,6 @@ Now let's adjust our models to compensate for our foreign keys.
 ```ruby
   belongs_to :user
   belongs_to :state
-  has_many :notes
 ```
 
 **Contact**
@@ -473,14 +472,15 @@ Now let's adjust our models to compensate for our foreign keys.
   belongs_to :contact
   belongs_to :day
   belongs_to :week
+  has_many :tupdates
  ```
 
-**Note**
+**Tupdate (Timeline Update)**
 
 ```ruby
   belongs_to :user
-  belongs_to :company
   belongs_to :icon
+  belongs_to :stop
 ```
 
 ## Controllers
