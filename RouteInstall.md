@@ -774,19 +774,7 @@ We're almost ready to migrate, but first you need to fill in your seed file with
 Open the seed file in `db/seeds.rb` and paste this info. 
  
  ```ruby
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-
 # ### Days of the week ####################
-# This is to set up the days of the week
-# #########################################
-
-
 
 day_list = [
   ['Sunday', 'Sun'],
@@ -803,9 +791,7 @@ day_list.each do |name, abbrev|
 end
 
 
-# ### Days of the week ####################
-# This is to set up the days of the week
-# #########################################
+# ### Weekly etc. ####################
 
 week_list = [
   ['Every Week', 'Weekly'],
@@ -819,8 +805,6 @@ week_list.each do |description, abbrev|
 end
 
 # ### US States ###########################
-# This is to set up all the US states  
-# #########################################
 
 state_list = [
     ['Alaska','AK'],
@@ -880,13 +864,25 @@ state_list.each do |name, abbrev|
   State.create( name: name, abbrev: abbrev )
 end
 
+# ############## Icons ####################
+
+icon_list = [
+  ['Over Coffee', 'fa fa-coffee', ''],
+  ['Over Lunch', 'fa fa-cutlery', ''],
+  ['Over Drinks', 'fa fa-glass', ''],
+  ['In-Person', 'fa fa-user', ''],
+  ['Over the Phone', 'fa fa-phone', ''],
+  ['Via Email', 'fa fa-envelope-o', '']
+]
+
+icon_list.each do |name, fontawesome, bootstrap|
+  Icon.create( name: name, fontawesome: fontawesome, bootstrap: bootstrap )
+end
+
 # ############## Users ####################
-# This is to set up data to test with.   
-# Make sure the root user is set first.
-# #########################################
 
 user_list = [
-  ['user@example.com', 'password', 'password', 'admin']
+  ['michael@lavalung.com', 'jk030201', 'jk030201', 'admin']
 ]
 
 user_list.each do |email, password, password_confirmation, username|
@@ -895,9 +891,6 @@ end
 
 
 # ############## Companies ################
-# This is to set up data to test with.   
-# Make sure the root user is setup first.
-# #########################################
 
 company_list = [
   ['Twitter', '1355 Market Street', 'San Francisco', '5', '94103', '', '1'],
@@ -912,9 +905,6 @@ company_list.each do |name, address, city, state_id, zip, notes, user_id|
 end
 
 # ############## Contacts  ################
-# This is to set up data to test with.   
-# Make sure companies are setup first.
-# #########################################
 
 contact_list = [
   ['1','1','Jack','Dorsey','CEO','(415) 222-9670','','',''],
