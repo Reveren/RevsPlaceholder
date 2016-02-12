@@ -882,7 +882,7 @@ end
 # ############## Users ####################
 
 user_list = [
-  ['michael@lavalung.com', 'jk030201', 'jk030201', 'admin']
+  ['user@example.com', 'password', 'password', 'admin']
 ]
 
 user_list.each do |email, password, password_confirmation, username|
