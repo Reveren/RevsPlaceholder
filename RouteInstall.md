@@ -111,7 +111,7 @@ rails generate devise:install
 The generator will install an initializer which describes ALL of Devise's configuration options. It is *imperative* that you take a look at it. When you are done, you are ready to add Devise to any of your models using the generator:
 
 ```console
-rails generate devise User
+rails generate devise User role:string username:string:uniq
 ```
 
 Build the views so you can customize the templates later (in our views/users folder).
