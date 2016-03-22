@@ -120,12 +120,6 @@ Build the views so you can customize the templates later (in our views/users fol
 rails generate devise:views users
 ```
 
-Add username to Users, since it is not in there by default with Devise
-
-```console
-rails generate migration add_username_to_users username:string:uniq
-```
-
 Run rake db:migrate
 
 ```console
