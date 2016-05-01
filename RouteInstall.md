@@ -93,7 +93,7 @@ bundle install
 
 Add some tables for fixed values like US States:
 
-** Days **
+**Days**
 
 Create the model for the days. 
 
@@ -102,7 +102,7 @@ rails g model Day name:string abbrev:string
 rake db:migrate
 ```
 
-** Weeks **
+**Weeks**
 
 Create the model for the weeks. 
 
@@ -111,7 +111,7 @@ rails g model Week description:string abbrev:string
 rake db:migrate
 ```
 
-** States **
+**States**
 
 Create the model for the days. 
 
@@ -120,7 +120,7 @@ rails g model State name:string abbrev:string
 rake db:migrate
 ```
 
-** Icons **
+**Icons**
 
 Create the model for the icons. 
 
