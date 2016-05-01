@@ -194,15 +194,21 @@ class RegistrationsController < Devise::RegistrationsController
 end
 ```
 
-Tell Devise to use `:login` in the `authentication_keys`
+Tell routes that this new controller exists by changing `devise_for :users` to this:
 
-Modify `config/initializers/devise.rb` to have:
+```ruby
+devise_for :users, :controllers => { registrations: 'registrations' }
+```
+
+Tell Devise to use `:login` in the `authentication_keys` by modifying the Initializer:
+
+Modify `config/initializers/devise.rb` on line **34** to have:
 
 ```ruby
 config.authentication_keys = [ :login ]
 ```
 
-Modify `config/initializers/devise.rb` file to have
+Modify `config/initializers/devise.rb` on line **214** to have:
 
 ```ruby
 config.scoped_views = true
