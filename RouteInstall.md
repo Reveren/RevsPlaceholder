@@ -309,8 +309,8 @@ Add this:
 
 ```ruby
   <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+    <%= f.label :username %><br />
+    <%= f.text_field :username, autofocus: true %>
   </div>
 ```
 
