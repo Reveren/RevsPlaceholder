@@ -19,45 +19,70 @@ Now we need to change the Gemfile a little to load some of our first add-ons. Th
 
 ```ruby
 source 'https://rubygems.org'
-ruby '2.2.3'
-gem 'rails', '4.2.5'
+
+ruby '2.3.0'
+gem 'rails', '4.2.6'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
+gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development do
-  gem 'sqlite3'
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'better_errors'
   gem 'quiet_assets'
-  gem 'rails_layout'
-  gem 'spring-commands-rspec'
   gem 'binding_of_caller', '~> 0.7.2'
-  gem 'annotate', '~> 2.6', '>= 2.6.10'
-end
-group :development, :test do
-  gem 'byebug'
-  gem 'factory_girl_rails'
-  gem 'faker'
-  gem 'rspec-rails'
-end
-group :test do
-  gem 'capybara'
-  gem 'database_cleaner'
-  gem 'launchy'
-  gem 'selenium-webdriver'
-end
-group :test, :production do
-  gem 'mysql2', '< 0.4.0'
 end
 
-gem 'bootstrap-sass'
+group :development, :test do
+  gem 'sqlite3'
+  gem 'byebug'
+end
+
+group :test do
+#  gem 'capybara'
+end
+
+group :production do
+  gem 'pg'
+  gem 'rails_12factor'
+  gem 'puma'
+end
+
+# for bootstrap 4 tooltips and popovers
+source 'https://rails-assets.org' do
+  gem 'rails-assets-tether', '>= 1.1.0'
+end
+
+gem 'jquery-turbolinks'
+gem 'bootstrap', '~> 4.0.0.alpha3'
 gem 'font-awesome-rails'
+gem 'jquery-ui-rails'
 gem 'devise'
+# gem 'pundit'
+# gem 'awesome_nested_set'
+# gem "the_sortable_tree", "~> 2.5.0"
+# gem 'ransack'
+# gem 'local_time'
+# gem 'sucker_punch'
+# gem 'stripe'
+# gem 'stripe_event'
+# gem 'roadie'
+# gem 'gibbon', '~> 2.0'
+# gem 'paperclip'
+# gem 'aws-sdk', '< 2.0'
+# gem 'font_assets'
+# gem 'will_paginate'
+# gem 'cocoon'
+# gem 'gmaps4rails'
+# gem 'geocoder'
+# gem "recaptcha", require: "recaptcha/rails"
+# gem 'friendly_id'
+# gem 'ckeditor_rails'
 ```
 
 Now run bundle install.
@@ -66,7 +91,6 @@ Now run bundle install.
 bundle install
 ```
 
-During this setup, I'm only going to run `rake db-migrate` only once at the end. This will save some time, but will make error debugging a little bit more difficult during this setup. I highly recommend running `rake db:migrate` after each instance of running `rails generate` or the shortcut version `rails g`.
 
 ## Days
 
@@ -74,6 +98,7 @@ Create the model for the days.
 
 ```console
 rails g model Day name:string abbrev:string
+rake db:migrate
 ```
 
 ## Weeks
@@ -82,6 +107,7 @@ Create the model for the weeks.
 
 ```console
 rails g model Week description:string abbrev:string
+rake db:migrate
 ```
 
 ## States
@@ -90,6 +116,7 @@ Create the model for the days.
 
 ```console
 rails g model State name:string abbrev:string
+rake db:migrate
 ```
 
 ## Icons
@@ -98,6 +125,7 @@ Create the model for the icons.
 
 ```console
 rails g model Icon name:string fontawesome:string bootstrap:string
+rake db:migrate
 ```
 
 ## Devise
@@ -111,7 +139,7 @@ rails generate devise:install
 The generator will install an initializer which describes ALL of Devise's configuration options. It is *imperative* that you take a look at it. When you are done, you are ready to add Devise to any of your models using the generator:
 
 ```console
-rails generate devise User role:string username:string:uniq
+rails generate devise User username:string:uniq role_id:integer mailchimp:boolean
 ```
 
 Build the views so you can customize the templates later (in our views/users folder).
@@ -126,19 +154,36 @@ Run rake db:migrate
 rake db:migrate
 ```
 
-Modify `application_controller.rb` and add username, email, password, password confirmation and remember me to `configure_permitted_parameters`
+Add a file `registrations_controller.rb` and add the following to it:
 
 ```ruby
-class ApplicationController < ActionController::Base
-  before_action :configure_permitted_parameters, if: :devise_controller?
+class RegistrationsController < Devise::RegistrationsController
+  
+  prepend_before_action :check_captcha, only: [:create]
+  
+  private
 
-  protected
+    def sign_up_params
+      params.require(:user).permit(:username, :email, :mailchimp, :password, :password_confirmation)
+    end
+    
+    def sign_in_params
+      params.require(:user).permit(:username, :email, :login, :password, :password_confirmation, :remember_me)
+    end
+  
+    def account_update_params
+      params.require(:user).permit(:username, :email, :mailchimp, :password, :password_confirmation, :current_password)
+    end
 
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :remember_me) }
-    devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }
-    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation, :current_password) }
-  end
+    def check_captcha
+      if verify_recaptcha
+        true
+      else
+        self.resource = resource_class.new sign_up_params
+        respond_with_navigational(resource) { render :new }
+      end 
+    end
+
 end
 ```
 
@@ -198,6 +243,14 @@ class User < ActiveRecord::Base
 end
 ```
 
+**Modify the config**
+
+You need to set up the default URL options for the Devise mailer in each environment. Here is a possible configuration for `config/environments/development.rb`:
+
+```ruby
+config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+```
+
 **Modify the views**
 
 ***sessions/new.html.erb:***
@@ -243,128 +296,6 @@ Add this:
 ```
 
 
-## Company
-
-Let's use a scaffold to save some time. We will build the Company controller first. 
-
-```console
-rails g scaffold Company user_id:integer name address city state_id:integer zip:integer notes:text
-```
-
-Add foreign keys to migration.
-
-```ruby
-class CreateCompanies < ActiveRecord::Migration
-  def change
-    create_table :companies do |t|
-      t.integer :user_id
-      t.string :name
-      t.string :address
-      t.string :city
-      t.integer :state_id
-      t.integer :zip
-      t.text :notes
-
-      t.timestamps null: false
-    end
-    add_foreign_key :companies, :users, column: :user_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-  end
-end
-```
-
-## Contacts
-
-Now let's build the Contacts.
-
-```console
-rails g scaffold Contact user_id:integer company_id:integer first_name last_name title phone alt_phone email notes:text
-```
-
-Add foreign keys to migration.
-
-```ruby
-class CreateContacts < ActiveRecord::Migration
-  def change
-    create_table :contacts do |t|
-      t.integer :user_id
-      t.integer :company_id
-      t.string :first_name
-      t.string :last_name
-      t.string :title
-      t.string :phone
-      t.string :alt_phone
-      t.string :email
-      t.text :notes
-
-      t.timestamps null: false
-    end
-    add_foreign_key :contacts, :users,     column: :user_id,    primary_key: :id, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :contacts, :companies, column: :company_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-  end
-end
-```
-
-
-## Stops
-
-Now let's build the Stops.
-
-```console
-rails g scaffold Stop user_id:integer company_id:integer contact_id:integer day_id:integer week_id:integer notes:text active:boolean priority:integer
-```
-
-Add foreign keys to migration.
-
-```ruby
-class CreateStops < ActiveRecord::Migration
-  def change
-    create_table :stops do |t|
-      t.integer :user_id
-      t.integer :company_id
-      t.integer :contact_id
-      t.integer :day_id
-      t.integer :week
-      t.text :notes
-      t.boolean :active
-
-      t.timestamps null: false
-    end
-    add_foreign_key :stops, :users,     column: :user_id,    primary_key: :id, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :stops, :companies, column: :company_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :stops, :contacts,  column: :contact_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :stops, :days,      column: :day_id,     primary_key: :id, on_update: :cascade, on_delete: :cascade
-  end
-end
-```
-
-## Timeline Updates
-
-Now let's build the Timeline Updates.
-
-```console
-rails g scaffold Tupdate user_id:integer stop_id:integer icon_id:integer notes:text
-```
-
-Add foreign keys to migration.
-
-```ruby
-class CreateTupdates < ActiveRecord::Migration
-  def change
-    create_table :Tupdates do |t|
-      t.integer :user_id
-      t.integer :stop_id
-      t.integer :icon_id
-      t.text :notes
-
-      t.timestamps null: false
-    end
-    add_foreign_key :Tupdates, :users, column: :user_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :Tupdates, :stops, column: :stop_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :Tupdates, :icons, column: :icon_id, primary_key: :id, on_update: :cascade, on_delete: :cascade
-  end
-end
-```
-
 ## Homepages
 
 Now let's build the two homepages.
@@ -387,28 +318,14 @@ Rails.application.routes.draw do
   end
   
   root :to => 'home#welcome'
-  
-  resources :tupdates
-  resources :contacts
-  resources :companies  
-  resources :stops do
-    put :sort, on: :collection
-  end
 
 end
 ```
 
-## Config
-
-You need to set up the default URL options for the Devise mailer in each environment. Here is a possible configuration for `config/environments/development.rb`:
-
-```ruby
-config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-```
 
 ## Models
 
-Now let's adjust our models to compensate for our foreign keys. 
+These will need to be adjusted to match your models and relationships. 
 
 **Day**
 
@@ -443,242 +360,7 @@ Now let's adjust our models to compensate for our foreign keys.
   has_many :tupdates
 ```
 
-**Company**
-
-```ruby
-  belongs_to :user
-  belongs_to :state
-```
-
-**Contact**
-
-```ruby
-  has_many :stops, dependent: :destroy
-  belongs_to :user
-  belongs_to :company
-```
-
-**Stop**
-
-```ruby
-  belongs_to :user
-  belongs_to :company
-  belongs_to :contact
-  belongs_to :day
-  belongs_to :week
-  has_many :tupdates
- ```
-
-**Tupdate (Timeline Update)**
-
-```ruby
-  belongs_to :user
-  belongs_to :icon
-  belongs_to :stop
-```
-
 ## Controllers
-
-### application_controller.rb
-
-Add the `layout_by_resource` def so login pages can be styled differently than logged-in pages. Basically, your `application_controller.rb` file should look like this now:
-
-```ruby
-class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-  
-  before_action :configure_permitted_parameters, if: :devise_controller?
-  
-  layout :layout_by_resource
-  
-  protected
-  
-  def layout_by_resource
-    if devise_controller? && resource_name == :user && action_name == "new"
-      "empty"
-    else
-      "application"
-    end
-  end
-
-  def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :remember_me) }
-    devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:login, :username, :email, :password, :remember_me) }
-    devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:username, :email, :password, :password_confirmation, :current_password) }
-  end
- 
-end
-```
-
-### companies_controller.rb
-
-Make sure only logged-in users can see the content.
-
-```ruby
-before_action :authenticate_user!
-```
-
-Make sure all content that is created is attributed to the person who created it by adding `current_user`:
-
-Change this line: 
-
-```ruby
-def create
-  @company = Company.new(company_params)
-```
-
-to this:
-
-```ruby
-def create
-  @company = current_user.companies.new(company_params)
-```
-
-We also need to make sure the logged-in user can only see what they created.
-
-Change the index definition from this:
-
-```ruby
-def index
-  @companies = Company.all
-end
-```
-
-to this:
-
-```ruby
-def index
-  @companies = Company.all.where(user_id: current_user)
-end
-```
-
-### contacts_controller.rb
-
-Make sure only logged-in users can see the content.
-
-```ruby
-before_action :authenticate_user!
-```
-
-Make sure all content that is created is attributed to the person who created it by adding `current_user`:
-
-Change this line: 
-
-```ruby
-def create
-  @contact = Contact.new(contact_params)
-```
-
-to this:
-
-```ruby
-def create
-  @contact = current_user.contacts.new(contact_params)
-```
-
-We also need to make sure the logged-in user can only see what they created.
-
-Change the index definition from this:
-
-```ruby
-def index
-  @contacts = Contact.all
-end
-```
-
-to this:
-
-```ruby
-def index
-  @contacts = Contact.all.where(user_id: current_user)
-end
-```
-
-### stops_controller.rb
-
-Make sure only logged-in users can see the content.
-
-```ruby
-before_action :authenticate_user!
-```
-
-Make sure all content that is created is attributed to the person who created it by adding `current_user`:
-
-Change this line: 
-
-```ruby
-def create
-  @stop = Stop.new(stop_params)
-```
-
-to this:
-
-```ruby
-def create
-  @stop = current_user.stops.new(stop_params)
-```
-
-We also need to make sure the logged-in user can only see what they created.
-
-Change the index definition from this:
-
-```ruby
-def index
-  @stops = Stop.all
-end
-```
-
-to this:
-
-```ruby
-def index
-  @stops = Stop.all.where(user_id: current_user)
-end
-```
-
-### tupdates_controller.rb
-
-Make sure only logged-in users can see the content.
-
-```ruby
-before_action :authenticate_user!
-```
-
-Make sure all content that is created is attributed to the person who created it by adding `current_user`:
-
-Change this line: 
-
-```ruby
-def create
-  @note = Tupdate.new(update_params)
-```
-
-to this:
-
-```ruby
-def create
-  @note = current_user.tupdates.new(update_params)
-```
-
-We also need to make sure the logged-in user can only see what they created.
-
-Change the index definition from this:
-
-```ruby
-def index
-  @notes = Tupdate.all
-end
-```
-
-to this:
-
-```ruby
-def index
-  @notes = Tupdate.all.where(user_id: current_user)
-end
-```
 
 ### home_controller.rb
 
@@ -697,31 +379,44 @@ Now in the `views/layout` folder, duplicate the `application.html.erb` file to `
 ## Boostrap
 
 ### CSS 
+Gonna be using Bootstrap 4 which at this writing is still in alpha. 
 
-Make sure Bootstrap and Font Awesome were added and uncommented in our Gemfile. If not, do that and run `bundle install`.
+Add this to your Gemfile:
 
 ```ruby
-gem 'bootstrap-sass'
+# for bootstrap 4 tooltips and popovers
+source 'https://rails-assets.org' do
+  gem 'rails-assets-tether', '>= 1.1.0'
+end
+```
+
+Add the gem and run `bundle install`.
+
+```ruby
+gem 'bootstrap', '~> 4.0.0.alpha3'
 gem 'font-awesome-rails'
+```
+
+```console
+bundle install
 ```
 
 Remove the scaffold.css from your css in `app/assets/stylesheets/scaffold.css`.
 
-In the same folder, change the rename `application.css` to `application.css.scss` by adding `scss` to the end of it.
+In the same folder, change the rename `application.css` to `application.scss` by adding `s` to it.
 
-Open `app/assets/stylesheets/application.css.scss` and import Bootstrap styles.
+Open `app/assets/stylesheets/application.scss` and import Bootstrap styles.
 
 ```scss
-@import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome";
 ```
 
-`bootstrap-sprockets` must be imported before `bootstrap` for the icon fonts to work.
+`bootstrap-sprockets` is no longer needed with version 4.
+
+**Important**
 
 Remove all the `*= require_self` and `*= require_tree .` statements from the file. (We use `@import` to import Sass files instead)
-
-**Remember, do not use** `*= require` **in Sass or your other stylesheets will not be able to access the Bootstrap mixins or variables.**
 
 ### JS
 
@@ -882,40 +577,11 @@ user_list = [
 user_list.each do |email, password, password_confirmation, username|
   User.create( email: email, password: password,  password_confirmation: password_confirmation, username: username)
 end
-
-
-# ############## Companies ################
-
-company_list = [
-  ['Twitter', '1355 Market Street', 'San Francisco', '5', '94103', '', '1'],
-  ['Apple', '1 Infinite Loop', 'Cupertino', '5', '95014', '', '1'],
-  ['Facebook', '1 Hacker Way', 'Menlo Park', '5', '94025', '', '1'],
-  ['Google', '1600 Amphitheatre Parkway', 'Mountain View', '5', '94043', '', '1'],
-  ['Microsoft', 'One Microsoft Way', 'Redmond', '48', '98052', '', '1']
-]
-
-company_list.each do |name, address, city, state_id, zip, notes, user_id|
-  Company.create( name: name, address: address,  city: city, state_id: state_id, zip: zip, notes: notes, user_id: user_id)
-end
-
-# ############## Contacts  ################
-
-contact_list = [
-  ['1','1','Jack','Dorsey','CEO','(415) 222-9670','','',''],
-  ['1','2','Tim','Cook','CEO','(800) 692–7753','','',''],
-  ['1','3','Mark','Zuckerberg','CEO','(650) 543-4800','','',''],
-  ['1','4','Sundar','Pichai','CEO','(650) 253-0000','','',''],
-  ['1','5','Satya','Nadella','CEO','(425) 882-8080','','',''],
-]
-
-contact_list.each do |user_id, company_id, first_name, last_name, title, phone, alt_phone, email, notes|
-  Contact.create(user_id: user_id, company_id: company_id, first_name: first_name, last_name: last_name, title: title, phone: phone, alt_phone: alt_phone, email: email, notes: notes)
-end
 ```
 
 ## Migrate
 
-We're finally ready to create the database and migrate it to see if we have any errors. 
+We should run `rake db:migrate` again to make sure everythign has run and to see if we have any errors. 
 
 ```console
 rake db:migrate
