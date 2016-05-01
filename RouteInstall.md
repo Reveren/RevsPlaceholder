@@ -142,6 +142,12 @@ The generator will install an initializer which describes ALL of Devise's config
 rails generate devise User username:string:uniq role_id:integer mailchimp:boolean
 ```
 
+Add the role table for user roles:
+
+```console
+rails g model Role name:string
+```
+
 Build the views so you can customize the templates later (in our views/users folder).
 
 ```console
