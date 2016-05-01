@@ -218,7 +218,9 @@ Modify `config/initializers/devise.rb` on line **214** to have:
 config.scoped_views = true
 ```
 
-In the `User` model, overwrite Devise's `find_for_database_authentication` method. Also, be sure to add case *insensitivity* to your validations on `:username`. Alos add other validations. 
+**User Model**
+
+In the `User` model, overwrite Devise's `find_for_database_authentication` method. Also, be sure to add case *insensitivity* to your validations on `:username` and any other validations you see fit.
 
 Basically your `user.rb` should look like this now:
 
@@ -260,7 +262,7 @@ class User < ActiveRecord::Base
 end
 ```
 
-**Modify the config**
+**Config**
 
 You need to set up the default URL options for the Devise mailer in each environment. Here is a possible configuration for `config/environments/development.rb`:
 
@@ -268,7 +270,7 @@ You need to set up the default URL options for the Devise mailer in each environ
 config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 ```
 
-**Modify the views**
+**Views**
 
 ***sessions/new.html.erb:***
 
