@@ -194,6 +194,8 @@ class RegistrationsController < Devise::RegistrationsController
 end
 ```
 
+**Routes**
+
 Tell routes that this new controller exists by changing `devise_for :users` to this:
 
 ```ruby
