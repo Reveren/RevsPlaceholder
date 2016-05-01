@@ -202,6 +202,8 @@ Tell routes that this new controller exists by changing `devise_for :users` to t
 devise_for :users, :controllers => { registrations: 'registrations' }
 ```
 
+**Initializer**
+
 Tell Devise to use `:login` in the `authentication_keys` by modifying the Initializer:
 
 Modify `config/initializers/devise.rb` on line **34** to have:
