@@ -41,3 +41,21 @@ Now you can quit.
 ```console
 \q
 ```
+
+### Importing and Exporting DBs
+
+I like to use intermediate files rather than piping and doing everything at once. That way I have a cop of the DB locally. 
+
+To create a backup of a DB, run the following (it will ask for your remote password).
+
+```console
+pg_dump -h remotehost -U remoteuser dbname > backup.sql
+```
+
+This will create a local copy of the DB called backup.sql and place it whereever you performed this command.
+
+Now to import this into your local DB, run the folowing command (it will ask for your local password).
+
+```console
+psql -h localhost -U localuser dbname < backup.sql
+```
