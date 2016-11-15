@@ -2,7 +2,7 @@
 
 Once installed, you can't just work on Users willy nilly, you have to be inside a sandbox. Then you can create a DB, add a user, and then add permissions to that user to the DB. Like so:
 
-Connect to a temp area (it can really be anything):
+Connect to a sandbox (the name can really be anything):
 
 ```console
 psql somename
