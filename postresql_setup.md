@@ -1,4 +1,4 @@
-### Once Installed
+### Create Users and Databases
 
 Once installed, you can't just work on Users willy nilly, you have to be inside a sandbox. Then you can create a DB, add a user, and then add permissions to that user to the DB. Like so:
 
