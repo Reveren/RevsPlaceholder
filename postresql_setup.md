@@ -20,24 +20,24 @@ somename=#
 
 Create a User.
 
-```sql
+```console
 somename=# CREATE USER tom WITH PASSWORD 'myPassword';
 ```
 
 Create the DB.
 
-```sql
+```console
 somename=# CREATE DATABASE mydatabase;
 ```
 
 Add privileges for the User to the DB.
 
-```sql
+```console
 somename=# GRANT ALL PRIVILEGES ON DATABASE mydatabase TO tom;
 ```
 
 No you can quit.
 
-```sql
+```console
 template1=# \q
 ```
