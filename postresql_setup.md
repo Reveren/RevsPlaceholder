@@ -1,3 +1,23 @@
+### Installing
+
+Use homebrew to install postgreSQL
+
+```concole
+brew install postgres
+```
+
+Uninstall the gem
+
+```console
+gem uninstall pg
+```
+
+Reinstall the gem
+
+```console
+gem install pg
+```
+
 ### Create Users and Databases
 
 Once installed, you can't just work on Users willy nilly, you have to be inside a sandbox. Then you can create a DB, add a user, and then add permissions to that user to the DB. Like so:
