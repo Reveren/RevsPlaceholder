@@ -21,23 +21,23 @@ somename=#
 Create a User.
 
 ```console
-somename=# CREATE USER tom WITH PASSWORD 'myPassword';
+CREATE USER tom WITH PASSWORD 'myPassword';
 ```
 
 Create the DB.
 
 ```console
-somename=# CREATE DATABASE mydatabase;
+CREATE DATABASE mydatabase;
 ```
 
 Add privileges for the User to the DB.
 
 ```console
-somename=# GRANT ALL PRIVILEGES ON DATABASE mydatabase TO tom;
+GRANT ALL PRIVILEGES ON DATABASE mydatabase TO tom;
 ```
 
 No you can quit.
 
 ```console
-template1=# \q
+\q
 ```
