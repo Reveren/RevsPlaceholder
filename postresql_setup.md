@@ -36,7 +36,7 @@ Add privileges for the User to the DB.
 GRANT ALL PRIVILEGES ON DATABASE mydatabase TO tom;
 ```
 
-No you can quit.
+Now you can quit.
 
 ```console
 \q
