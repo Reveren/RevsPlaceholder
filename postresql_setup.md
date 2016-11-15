@@ -34,7 +34,7 @@ You should see a prompt like so:
 psql (9.5.5)
 Type "help" for help.
 
-somename=#
+sandbox=#
 ```
 
 Create a User.
