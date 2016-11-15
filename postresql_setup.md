@@ -5,7 +5,7 @@ Once installed, you can't just work on Users willy nilly, you have to be inside 
 Connect to a temp area (it can really be anything):
 
 ```console
-createdb somename
+psql somename
 ```
 
 You should see a prompt like so:
