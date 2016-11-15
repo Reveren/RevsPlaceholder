@@ -21,7 +21,7 @@ somename=#
 Create a User.
 
 ```console
-CREATE USER tom WITH PASSWORD 'myPassword';
+CREATE USER "tom" WITH PASSWORD 'myPassword';
 ```
 
 Create the DB.
