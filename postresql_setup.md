@@ -25,13 +25,12 @@ Once installed, you can't just work on Users willy nilly, you have to be inside 
 Connect to a sandbox (the name can really be anything):
 
 ```console
-psql somename
+psql sandbox
 ```
 
 You should see a prompt like so:
 
 ```console
-~ $ psql somename
 psql (9.5.5)
 Type "help" for help.
 
