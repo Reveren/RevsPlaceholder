@@ -61,6 +61,18 @@ Now you can quit.
 \q
 ```
 
+After rebooting Mac, I ran into an ussue where the snadbox feature did not work. I had to create the DB first, then go into psql and add teh user to it. 
+
+```console
+createdb test_development
+
+psql test_development
+
+GRANT ALL PRIVILEGES ON DATABASE mydatabase TO tom;
+
+\q
+```
+
 ### Importing and Exporting DBs
 
 I like to use intermediate files rather than piping and doing everything at once. That way I have a copy of the DB locally. 
