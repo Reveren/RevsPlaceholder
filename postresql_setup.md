@@ -68,7 +68,9 @@ createdb test_development
 
 psql test_development
 
-GRANT ALL PRIVILEGES ON DATABASE mydatabase TO tom;
+CREATE USER "someuser" WITH PASSWORD 'myPassword';
+
+GRANT ALL PRIVILEGES ON DATABASE test_development TO someuser;
 
 \q
 ```
