@@ -61,7 +61,7 @@ Now you can quit.
 \q
 ```
 
-After rebooting Mac, I ran into an ussue where the snadbox feature did not work. I had to create the DB first, then go into psql and add teh user to it. 
+After a few days and rebooting my Mac, I ran into an issue where the sandbox feature did not work. I had to create the DB first, then go into psql and add the user to it. 
 
 ```console
 createdb test_development
@@ -91,4 +91,14 @@ Now to import this into your local DB, run the following command (it will ask fo
 
 ```console
 psql -h localhost -U localuser dbname < backup.sql
+```
+
+I'm not sure if I ran into a bug or I did somehting wrong, but after the import I had to express the privileges again.
+
+```console
+psql test_development
+
+GRANT ALL PRIVILEGES ON DATABASE test_development TO someuser;
+
+\q
 ```
