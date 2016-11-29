@@ -98,7 +98,7 @@ I'm not sure if I ran into a bug or I did somehting wrong, but after the import 
 ```console
 psql test_development
 
-GRANT ALL PRIVILEGES ON DATABASE test_development TO someuser;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO someuser;
 
 \q
 ```
