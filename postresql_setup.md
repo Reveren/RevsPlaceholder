@@ -46,14 +46,19 @@ Make sure this new user can do admin things like create a DB.
 ```console
 ALTER USER sampleuser CREATEDB;
 ```
+Now log out.
 
-Now you will want to login with the new info so the new database will be owned by this user.
+```console
+\q
+```
+
+Login with the new info so the new database will be owned by this user.
 
 ```console
 psql --host=localhost --port=5432 --username=sampleuser --password --dbname=postgres
 ```
 
-Use the password yo just created for that user, mine was `Passwordz`.
+Use the password you just created for that user, mine was `Passwordz`.
 
 Create the DB.
 
