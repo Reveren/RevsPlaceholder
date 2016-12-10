@@ -41,6 +41,11 @@ Create a User.
 ```console
 CREATE USER "sampleuser" WITH PASSWORD 'Passwordz';
 ```
+Make sure this new user can do admin things like create a DB.
+
+```console
+ALTER USER sampleuser CREATEDB;
+```
 
 Now you will want to login with the new info so the new database will be owned by this user.
 
