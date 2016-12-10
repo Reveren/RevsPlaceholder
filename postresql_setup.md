@@ -36,13 +36,19 @@ psql --host=localhost --port=5432 --username=michael --password --dbname=postgre
 
 Whe it asks for a password, user your system password. 
 
-
-
 Create a User.
 
 ```console
 CREATE USER "sampleuser" WITH PASSWORD 'Passwordz';
 ```
+
+Now you will want to login with the new info so the new database will be owned by this user.
+
+```console
+psql --host=localhost --port=5432 --username=sampleuser --password --dbname=postgres
+```
+
+Use the password yo just created for that user, mine was `Passwordz`.
 
 Create the DB.
 
