@@ -20,27 +20,28 @@ gem install pg
 
 ### Create Users and Databases
 
-Once installed, you can't just work on Users willy nilly, you have to be inside a sandbox. Then you can create a DB, add a user, and then add permissions to that user to the DB. Like so:
-
-Connect to a sandbox (the name can really be anything):
+For some reason, Brew removes the local user, but you can add it back. 
 
 ```console
-psql sandbox
+createdb michael
 ```
 
-You should see a prompt like so:
+Use your system's local user name. 
+
+Now add the other users. 
 
 ```console
-psql (9.5.5)
-Type "help" for help.
-
-sandbox=#
+psql --host=localhost --port=5432 --username=michael --password --dbname=postgres
 ```
+
+Whe it asks for a password, user your system password. 
+
+
 
 Create a User.
 
 ```console
-CREATE USER "tom" WITH PASSWORD 'myPassword';
+CREATE USER "sampleuser" WITH PASSWORD 'Passwordz';
 ```
 
 Create the DB.
