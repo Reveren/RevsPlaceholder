@@ -445,6 +445,7 @@ Require Bootstrap Javascripts in `app/assets/javascripts/application.js`. Make s
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require tether
 //= require bootstrap
 //= require_tree .
 ```
