@@ -2,7 +2,7 @@
 Just a place to publicly store some stuff. 
 
 After installing Postgresql ona Mac from brew, find out username:
-```
+```PLpgSQL
 $ cd ~
 $ pwd
 /Users/someuser
